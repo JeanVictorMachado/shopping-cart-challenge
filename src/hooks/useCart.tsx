@@ -38,15 +38,17 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       setCart([...cart, product.data]);
     } catch {
-      // TODO
+      toast.error('Erro na adição do produto');
     }
   };
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      const products = cart.filter((product) => product.id !== productId);
+
+      setCart(products);
     } catch {
-      // TODO
+      toast.error('Erro na remoção do produto');
     }
   };
 
@@ -55,9 +57,21 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+      const product = cart.find((product) => product.id === productId);
+      const quantityProduct = cart.filter((product) => product.id === productId);
+      const productIndex = cart.findIndex((product) => product.id === productId);
+      let allProducts = cart;
+
+      if (quantityProduct.length === amount) {
+        setCart([...cart, product as Product]);
+        return;
+      }
+
+      allProducts.splice(productIndex, 1);
+
+      setCart([...allProducts]);
     } catch {
-      // TODO
+      toast.error('Erro na alteração de quantidade do produto');
     }
   };
 

@@ -19,7 +19,7 @@ interface Product {
 }
 
 const Cart = (): JSX.Element => {
-  const { cart, addProduct, removeProduct, updateProductAmount } = useCart();
+  const { cart, removeProduct, updateProductAmount } = useCart();
 
   let products: Product[] = [];
 
@@ -44,11 +44,17 @@ const Cart = (): JSX.Element => {
   }, 0));
 
   function handleProductIncrement(product: Product) {
-    addProduct(product.id);
+    updateProductAmount({
+      productId: product.id,
+      amount: cartItemsAmount[product.id]
+    });
   }
 
   function handleProductDecrement(product: Product) {
-    // TODO
+    updateProductAmount({
+      productId: product.id,
+      amount: cartItemsAmount[product.id] - 1
+    });
   }
 
   function handleRemoveProduct(productId: number) {
@@ -80,6 +86,7 @@ const Cart = (): JSX.Element => {
                     <button
                       type="button"
                       data-testid="decrement-product"
+                      onClick={() => handleProductDecrement(product)}
                     >
                       <MdRemoveCircleOutline size={20} />
                     </button>
